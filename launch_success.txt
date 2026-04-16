@@ -1,0 +1,7 @@
+# TrackYourAPI Launch Verification
+
+NPM: @trackyourapi/sdk v0.1.0
+PyPI: trackyourapi v0.1.0
+
+Dashboard: Verified
+Edge Functions: Verified

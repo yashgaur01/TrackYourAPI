@@ -1,0 +1,6 @@
+
+[anthropic]
+anthropic>=0.20.0
+
+[openai]
+openai>=1.0.0
