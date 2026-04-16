@@ -18,52 +18,54 @@ import {
 import { useState, useEffect } from "react"
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics"
 
+const mockTraces = [
+  {
+    _id: "mock1",
+    provider: "openai",
+    model: "gpt-4o",
+    tokens: 842,
+    cost: 0.003,
+    latency: 124,
+    timestamp: Date.now() - 1000,
+    status: "200 OK"
+  },
+  {
+    _id: "mock2",
+    provider: "anthropic",
+    model: "claude-3-opus",
+    tokens: 1240,
+    cost: 0.045,
+    latency: 0,
+    timestamp: Date.now() - 5000,
+    status: "429 ERR"
+  },
+  {
+    _id: "mock3",
+    provider: "google",
+    model: "gemini-1.5-pro",
+    tokens: 2100,
+    cost: 0.012,
+    latency: 845,
+    timestamp: Date.now() - 12000,
+    status: "200 OK"
+  }
+];
+
 export function HomePage() {
   const [activeTab, setActiveTab] = useState<"ts" | "py">("ts")
   const [activeProvider, setActiveProvider] = useState<"openai" | "anthropic" | "gemini" | "deepseek" | "custom">("openai")
   
   // Real-time data hooks
-  const { metrics: stats, recentActivity } = useDashboardMetrics("24h")
-  const [liveTraces, setLiveTraces] = useState<any[]>([])
+  const { data } = useDashboardMetrics()
+  const stats = data?.stats;
+  const recentActivity = data?.recentActivity;
 
-  // Sample data fallback for non-logged in or empty states
-  const mockTraces = [
-    {
-      _id: "mock1",
-      provider: "openai",
-      model: "gpt-4o",
-      tokens: 842,
-      cost: 0.003,
-      latency: 124,
-      timestamp: Date.now() - 1000,
-      status: "200 OK"
-    },
-    {
-      _id: "mock2",
-      provider: "anthropic",
-      model: "claude-3-opus",
-      tokens: 1240,
-      cost: 0.045,
-      latency: 0,
-      timestamp: Date.now() - 5000,
-      status: "429 ERR"
-    },
-    {
-      _id: "mock3",
-      provider: "google",
-      model: "gemini-1.5-pro",
-      tokens: 2100,
-      cost: 0.012,
-      latency: 845,
-      timestamp: Date.now() - 12000,
-      status: "200 OK"
-    }
-  ]
+  const [liveTraces, setLiveTraces] = useState<any[]>(mockTraces)
 
   useEffect(() => {
     if (recentActivity && recentActivity.length > 0) {
       setLiveTraces(recentActivity)
-    } else if (recentActivity && recentActivity.length === 0) {
+    } else {
       setLiveTraces(mockTraces)
     }
   }, [recentActivity])
@@ -82,9 +84,7 @@ export function HomePage() {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded bg-primary text-primary-foreground">
-              <Zap className="h-5 w-5" />
-            </div>
+            <img src="/logo.png" alt="TrackYourAPI Logo" className="h-8 w-auto object-contain" />
             <span className="text-xl font-bold tracking-tighter">TRACKYOURAPI</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -137,7 +137,7 @@ export function HomePage() {
               </div>
 
               {/* Right Column: Floating Provider Logos */}
-              <div className="flex-1 relative h-[450px] lg:h-[600px] w-full mt-12 lg:mt-0 pointer-events-none perspective-[1000px]">
+              <div className="flex-1 relative h-[250px] sm:h-[350px] lg:h-[600px] w-full mt-2 lg:mt-0 pointer-events-none perspective-[1000px] transform scale-[0.65] sm:scale-[0.8] lg:scale-100 origin-top">
                 <div className="absolute inset-0">
                   {/* OpenAI / ChatGPT - Top Right */}
                   <div className="absolute top-[0%] right-[0%] lg:right-[5%] w-24 h-24 lg:w-28 lg:h-28 bg-card shadow-xl dark:bg-white/5 backdrop-blur-md border border-border/50 dark:border-white/10 rounded-3xl lg:rounded-[2rem] rotate-12 flex items-center justify-center animate-[float_6s_ease-in-out_infinite]">
@@ -286,7 +286,7 @@ export function HomePage() {
                 </div>
 
                 {/* Dashboard Main Area */}
-                <div className="flex-1 p-6 lg:p-8 overflow-hidden bg-background/20 relative">
+                <div className="flex-1 p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-background/20 relative">
 
                   {/* Decorative Background Glow inside Dashboard */}
                   <div className="absolute top-0 right-0 w-96 h-96 bg-[#0EA5E9]/10 blur-[100px] rounded-full pointer-events-none" />
@@ -653,7 +653,7 @@ export function HomePage() {
                   Start Tracing <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-              <div className="relative h-[440px] w-full rounded-2xl border border-border/50 bg-card/60 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl p-4 md:p-6 overflow-hidden hidden md:flex flex-col group">
+              <div className="relative h-[440px] w-full rounded-2xl border border-border/50 bg-card/60 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl p-4 md:p-6 overflow-hidden flex flex-col group mt-12 lg:mt-0">
                 {/* Decorative Window Controls & Live Badge */}
                 <div className="flex justify-between items-center border-b border-border/50 pb-4 mb-4">
                   <div className="flex items-center gap-2">
@@ -672,44 +672,54 @@ export function HomePage() {
                 <div className="flex-1 space-y-3 relative overflow-hidden">
 
                   {liveTraces.slice(0, 4).map((trace, idx) => {
-                    const isError = trace.status === "429 ERR";
+                    const isError = trace.status === "429 ERR" || trace.status?.includes("ERR");
                     const isOpenAI = trace.provider === "openai";
                     const isAnthropic = trace.provider === "anthropic";
                     const isGemini = trace.provider === "google" || trace.provider === "gemini";
                     
                     return (
                       <div key={trace._id} className={cn(
-                        "relative rounded-lg p-3.5 border transition-all cursor-pointer group/row",
-                        idx === 0 ? "bg-background shadow-md border-border/50 hover:bg-muted/40" : 
-                        isError ? "bg-red-500/5 border-red-500/20 hover:bg-red-500/10 scale-[1.01] shadow-lg animate-pulse" :
-                        "hover:bg-muted/40 border-transparent hover:border-border/50",
-                        idx > 2 && "opacity-60"
+                        "relative rounded-xl p-4 border transition-all duration-300 cursor-pointer group/row overflow-hidden",
+                        idx === 0 ? "bg-card/80 shadow-[0_4px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] border-border hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(14,165,233,0.15)] hover:-translate-y-0.5 z-10" : 
+                        isError ? "bg-red-500/5 border-red-500/20 hover:bg-red-500/10 shadow-[0_4px_20px_rgba(239,68,68,0.1)] hover:shadow-[0_8px_24px_rgba(239,68,68,0.2)] hover:-translate-y-0.5 z-10" :
+                        "hover:bg-card/60 border-transparent hover:border-border/50 hover:shadow-lg hover:-translate-y-0.5",
+                        idx > 2 && "opacity-50 hover:opacity-100"
                       )}>
+                        {/* Background Hover Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/row:translate-x-full duration-1000 ease-in-out" />
+
                         {/* Status Marker */}
                         <div className={cn(
-                          "absolute inset-y-0 left-0 w-1 rounded-l-lg",
-                          isError ? "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)]" : "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"
+                          "absolute inset-y-0 left-0 w-1 rounded-l-xl transition-all duration-300",
+                          isError ? "bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]" : 
+                          idx === 0 ? "bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.6)]" : 
+                          "bg-muted-foreground/30 group-hover/row:bg-green-500/50"
                         )} />
                         
-                        <div className="flex items-center justify-between pl-3 pr-1">
+                        <div className="flex items-center justify-between pl-3 pr-1 relative z-10">
                           <div className="flex items-center gap-4">
                             <div className={cn(
-                              "px-2.5 py-1 rounded text-[10px] font-bold border shadow-sm",
-                              isError ? "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30" : "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20"
+                              "px-2.5 py-1.5 rounded-md text-[10px] font-bold border transition-colors",
+                              isError ? "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30 shadow-[inset_0_1px_4px_rgba(239,68,68,0.2)]" : 
+                              idx === 0 ? "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30 shadow-[inset_0_1px_4px_rgba(34,197,94,0.2)]" :
+                              "bg-muted text-muted-foreground border-border"
                             )}>
                               {trace.status || "200 OK"}
                             </div>
                             <div>
-                              <div className="text-sm font-bold font-mono text-foreground/90 flex items-center gap-2">
-                                POST <span className="text-muted-foreground font-medium truncate max-w-[120px]">/v1/chat/completions</span>
+                              <div className={cn(
+                                "text-[13px] sm:text-sm font-bold font-mono flex items-center gap-2",
+                                isError ? "text-red-600 dark:text-red-400" : "text-foreground/90"
+                              )}>
+                                POST <span className="text-muted-foreground font-medium truncate max-w-[120px] sm:max-w-[160px] group-hover/row:text-foreground/70 transition-colors">/v1/chat/completions</span>
                               </div>
-                              <div className="text-[11px] text-muted-foreground flex items-center gap-2 mt-1 font-medium">
-                                <span className="flex items-center gap-1.5">
+                              <div className="text-[10px] sm:text-[11px] text-muted-foreground flex items-center gap-2 mt-1.5 font-medium">
+                                <span className="flex items-center gap-1.5 bg-background/50 px-1.5 py-0.5 rounded-sm border border-border/50 backdrop-blur-sm">
                                   <div className={cn(
-                                    "w-1 h-1 rounded-full shadow-[0_0_6px_rgba(0,0,0,0.5)]",
-                                    isOpenAI ? "bg-blue-500 shadow-blue-500/80" : 
-                                    isAnthropic ? "bg-purple-500 shadow-purple-500/80" : 
-                                    isGemini ? "bg-green-500 shadow-green-500/80" : "bg-orange-500 shadow-orange-500/80"
+                                    "w-1.5 h-1.5 rounded-full",
+                                    isOpenAI ? "bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]" : 
+                                    isAnthropic ? "bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]" : 
+                                    isGemini ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]" : "bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]"
                                   )} /> 
                                   {trace.model}
                                 </span>
@@ -719,21 +729,24 @@ export function HomePage() {
                             </div>
                           </div>
                           
-                          <div className="flex gap-6 text-right">
+                          <div className="flex gap-4 sm:gap-8 text-right">
                             <div className="flex flex-col items-end justify-center">
                               <span className={cn(
-                                "text-[13px] font-bold font-mono",
-                                trace.latency > 0 ? "text-cyan-600 dark:text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" : "text-muted-foreground"
+                                "text-[12px] sm:text-[14px] font-bold font-mono transition-colors",
+                                trace.latency > 0 ? "text-cyan-600 dark:text-cyan-400 group-hover/row:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" : "text-muted-foreground"
                               )}>
                                 {trace.latency > 0 ? `${trace.latency}ms` : "--"}
                               </span>
-                              {idx === 0 && <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mt-0.5">Latency</span>}
+                              {idx === 0 && <span className="text-[8px] sm:text-[9px] text-muted-foreground uppercase font-black tracking-widest mt-1 opacity-70">Latency</span>}
                             </div>
-                            <div className="flex flex-col items-end w-16 justify-center">
-                              <span className="text-[13px] font-bold font-mono text-foreground/80">
+                            <div className="flex flex-col items-end w-14 sm:w-16 justify-center">
+                              <span className={cn(
+                                "text-[12px] sm:text-[14px] font-bold font-mono",
+                                isError ? "text-red-500" : "text-foreground/80 group-hover/row:text-foreground transition-colors"
+                              )}>
                                 {trace.cost > 0 ? `$${trace.cost.toFixed(4)}` : "--"}
                               </span>
-                              {idx === 0 && <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mt-0.5">Cost</span>}
+                              {idx === 0 && <span className="text-[8px] sm:text-[9px] text-muted-foreground uppercase font-black tracking-widest mt-1 opacity-70">Cost</span>}
                             </div>
                           </div>
                         </div>
@@ -762,7 +775,7 @@ export function HomePage() {
               </p>
             </div>
 
-            <div className="relative mx-auto max-w-5xl rounded-2xl border border-border/50 bg-[#141414] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] overflow-hidden font-sans hidden md:flex flex-col">
+            <div className="relative mx-auto max-w-5xl rounded-2xl border border-border/50 bg-[#141414] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] overflow-hidden font-sans flex flex-col mt-8 lg:mt-0">
               {/* Header */}
               <div className="flex justify-between items-center px-6 py-4 border-b border-white/10 dark:border-white/5 bg-[#141414]">
                 <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold tracking-widest text-white uppercase">
@@ -779,7 +792,7 @@ export function HomePage() {
               </div>
 
               {/* Main Grid Layout */}
-              <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-[1px] bg-white/10">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-white/10">
 
                 {/* Box 1: Left Top (Bar + Smoothing Line) */}
                 <div className="bg-[#141414] p-6 relative group cursor-crosshair h-[240px]">
@@ -826,7 +839,7 @@ export function HomePage() {
                 </div>
 
                 {/* Box 3: Bottom Full width block split to 4 metrics */}
-                <div className="bg-[#141414] col-span-2 grid grid-cols-4 gap-4 p-6 content-start h-[160px]">
+                <div className="bg-[#141414] col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4 p-6 content-start h-auto md:h-[160px]">
 
                   {/* Stat 1 */}
                   <div className="relative">
