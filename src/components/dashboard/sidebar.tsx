@@ -4,7 +4,6 @@ import {
   Bell,
   Key,
   Settings,
-  Zap,
   LogOut,
   BookOpen,
 } from "lucide-react"
@@ -66,10 +65,8 @@ export function DashboardSidebar() {
   return (
     <Sidebar className="border-r border-border/50">
       <SidebarHeader className="px-6 py-10">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="flex h-6 w-6 items-center justify-center rounded-none bg-primary text-primary-foreground">
-            <Zap className="h-4 w-4" />
-          </div>
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <img src="/logo.png" alt="TrackYourAPI Logo" className="h-7 w-7 object-contain rounded-md" />
           <span className="text-lg font-bold tracking-tighter uppercase">TrackYourAPI</span>
         </Link>
       </SidebarHeader>

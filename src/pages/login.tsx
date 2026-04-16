@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useNavigate, useLocation } from "react-router";
-import { Zap } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -56,8 +55,8 @@ export default function LoginPage() {
       
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center justify-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-none bg-primary text-primary-foreground mb-6 shadow-xl shadow-primary/20">
-            <Zap className="h-7 w-7" />
+          <div className="flex h-20 w-20 items-center justify-center mb-6 drop-shadow-[0_0_20px_rgba(139,92,246,0.3)] bg-black rounded-2xl p-2 border border-border/50">
+            <img src="/logo.png" alt="TrackYourAPI Logo" className="w-full h-full object-contain rounded-xl" />
           </div>
           <h2 className="text-3xl font-bold tracking-tighter uppercase">TrackYourAPI</h2>
         </div>
