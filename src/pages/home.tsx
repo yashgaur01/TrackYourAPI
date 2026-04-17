@@ -88,9 +88,9 @@ export function HomePage() {
             <span className="text-xl font-bold tracking-tighter">TRACKYOURAPI</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm font-medium hover:text-primary transition-colors">Features</a>
-            <a href="#sdk" className="text-sm font-medium hover:text-primary transition-colors">Integrations</a>
-            <a href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">Pricing</a>
+            <Link to="/features" className="text-sm font-medium hover:text-primary transition-colors">Features</Link>
+            <Link to="/integrations" className="text-sm font-medium hover:text-primary transition-colors">Integrations</Link>
+            <Link to="/pricing" className="text-sm font-medium hover:text-primary transition-colors">Pricing</Link>
           </nav>
           <div className="flex items-center gap-4">
             <ThemeToggle />
@@ -1031,24 +1031,24 @@ export function HomePage() {
               <div className="space-y-3">
                 <h4 className="font-semibold text-foreground">Product</h4>
                 <div className="flex flex-col gap-2">
-                  <a href="#" className="hover:text-foreground transition-colors">Features</a>
-                  <a href="#" className="hover:text-foreground transition-colors">Integrations</a>
-                  <a href="#" className="hover:text-foreground transition-colors">Pricing</a>
+                  <Link to="/features" className="hover:text-foreground transition-colors">Features</Link>
+                  <Link to="/integrations" className="hover:text-foreground transition-colors">Integrations</Link>
+                  <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
                 </div>
               </div>
               <div className="space-y-3">
                 <h4 className="font-semibold text-foreground">Resources</h4>
                 <div className="flex flex-col gap-2">
-                  <a href="#" className="hover:text-foreground transition-colors">Documentation</a>
-                  <a href="#" className="hover:text-foreground transition-colors">API Reference</a>
-                  <a href="#" className="hover:text-foreground transition-colors">Blog</a>
+                  <Link to="/docs" className="hover:text-foreground transition-colors">Documentation</Link>
+                  <Link to="/api-reference" className="hover:text-foreground transition-colors">API Reference</Link>
+                  <Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link>
                 </div>
               </div>
               <div className="space-y-3">
                 <h4 className="font-semibold text-foreground">Legal</h4>
                 <div className="flex flex-col gap-2">
-                  <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
-                  <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+                  <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+                  <Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
                 </div>
               </div>
             </div>

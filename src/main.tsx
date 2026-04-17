@@ -16,6 +16,13 @@ import LoginPage from '@/pages/login'
 import DocsPage from '@/pages/docs'
 import SettingsPage from '@/pages/settings'
 import ProfilePage from '@/pages/profile'
+import PricingPage from '@/pages/pricing'
+import ApiReferencePage from '@/pages/api-reference'
+import BlogPage from '@/pages/blog'
+import PrivacyPage from '@/pages/privacy'
+import TermsPage from '@/pages/terms'
+import FeaturesPage from '@/pages/features'
+import IntegrationsPage from '@/pages/integrations'
 import { ProtectedRoute } from '@/components/auth/protected-route'
 import '@/index.css'
 import { Toaster } from 'sonner'
@@ -37,6 +44,41 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/pricing",
+    element: <PricingPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/api-reference",
+    element: <ApiReferencePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/blog",
+    element: <BlogPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/terms",
+    element: <TermsPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/features",
+    element: <FeaturesPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/integrations",
+    element: <IntegrationsPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {
