@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics"
+import { useAuth } from "@/hooks/use-auth"
 
 const mockTraces = [
   {
@@ -54,6 +55,8 @@ const mockTraces = [
 export function HomePage() {
   const [activeTab, setActiveTab] = useState<"ts" | "py">("ts")
   const [activeProvider, setActiveProvider] = useState<"openai" | "anthropic" | "gemini" | "deepseek" | "custom">("openai")
+  
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
   
   // Real-time data hooks
   const { data } = useDashboardMetrics()
@@ -94,12 +97,20 @@ export function HomePage() {
           </nav>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Button asChild variant="ghost" className="hidden sm:inline-flex text-sm font-medium">
-              <Link to="/dashboard">Log in</Link>
-            </Button>
-            <Button asChild className="rounded-none px-6 text-xs font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90">
-              <Link to="/dashboard">Get Started</Link>
-            </Button>
+            {isAuthLoading ? null : isAuthenticated ? (
+              <Button asChild className="rounded-none px-6 text-xs font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90">
+                <Link to="/dashboard">Go to Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost" className="hidden sm:inline-flex text-sm font-medium">
+                  <Link to="/login">Log in</Link>
+                </Button>
+                <Button asChild className="rounded-none px-6 text-xs font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Link to="/login">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>

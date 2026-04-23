@@ -21,6 +21,7 @@ import ApiReferencePage from '@/pages/api-reference'
 import BlogPage from '@/pages/blog'
 import PrivacyPage from '@/pages/privacy'
 import TermsPage from '@/pages/terms'
+import AuthCallbackPage from '@/pages/auth-callback'
 import FeaturesPage from '@/pages/features'
 import IntegrationsPage from '@/pages/integrations'
 import { ProtectedRoute } from '@/components/auth/protected-route'
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthCallbackPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

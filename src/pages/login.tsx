@@ -124,7 +124,7 @@ export default function LoginPage() {
                 variant="outline"
                 className="w-full h-12 rounded-none font-bold uppercase tracking-widest transition-all hover:bg-background border-border/50 text-foreground"
                 onClick={async () => {
-                  const callbackUrl = new URL(from, window.location.origin).toString();
+                  const callbackUrl = new URL('/auth/callback', window.location.origin).toString();
                   await supabase.auth.signInWithOAuth({ 
                     provider: 'google',
                     options: { redirectTo: callbackUrl }
